@@ -1,10 +1,12 @@
 import pygame, sys
 from consts import *
 from scripts.entity import *
+from scripts.utils import *
 from scripts.tilemap import TileMap
 
-# ! make the smaller display thing (check the point of it first)
 # TODO: add resolution options (using pygame Surface); additionally use pygame Surface properties to add visual effects
+# ? maybe add the trees/etc as offgrid data too using the y-sort camera for them
+# ** credit Kenney for the tileset(assets)
 
 class Game:
     def __init__(self):
@@ -12,7 +14,7 @@ class Game:
 
         #window
         self.screen = pygame.display.set_mode((WINW, WINH))
-        self.window = pygame.Surface((640, 480))
+        self.window = pygame.Surface((1280, 720))
         # self.window = pygame.Surface((WINW, WINH))
         pygame.display.set_caption("Survivor.io Remake")
 
@@ -27,8 +29,13 @@ class Game:
         #camera
         self.scroll = [0, 0]
 
+        # images
+        self.assets = {
+            'ground/city': load_images('ground/city', scaleFactor=3)
+        }
+
         #tilemap
-        self.tilemap = TileMap(48)
+        self.tilemap = TileMap(self, 48)
         
         #game loop
         self.main()
