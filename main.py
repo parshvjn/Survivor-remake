@@ -1,21 +1,34 @@
 import pygame, sys
 from consts import *
 from scripts.entity import *
+from scripts.tilemap import TileMap
+
+# ! make the smaller display thing (check the point of it first)
+# TODO: add resolution options (using pygame Surface); additionally use pygame Surface properties to add visual effects
 
 class Game:
     def __init__(self):
         pygame.init()
-        self.window = pygame.display.set_mode((WINW, WINH))
+
+        #window
+        self.screen = pygame.display.set_mode((WINW, WINH))
+        self.window = pygame.Surface((640, 480))
+        # self.window = pygame.Surface((WINW, WINH))
         pygame.display.set_caption("Survivor.io Remake")
+
+        # run-vars
         self.clock = pygame.time.Clock()
         self.running = True
 
         #player
         self.movement = [False, False, False, False]
-        self.player = Player((100, 100), (50, 50))
+        self.player = Player((100, 100), (32, 50))
 
         #camera
         self.scroll = [0, 0]
+
+        #tilemap
+        self.tilemap = TileMap(48)
         
         #game loop
         self.main()
@@ -29,9 +42,13 @@ class Game:
             self.scroll[1] += (self.player.rect().centery - self.window.get_height() / 2 - self.scroll[1])/30
             render_scroll = (int(self.scroll[0]), int(self.scroll[1]))
 
+            #tilemap
+            self.tilemap.render(self.window, offset=render_scroll)
+
             #player
             self.player.update((self.movement[1]-self.movement[0], self.movement[3]-self.movement[2]))
             self.player.render(self.window, offset=render_scroll)
+
 
 
             for event in pygame.event.get():
@@ -60,6 +77,8 @@ class Game:
                     if event.key == pygame.K_DOWN:
                         self.movement[3] = False
             
+
+            self.screen.blit(pygame.transform.scale(self.window, (WINW, WINH)), (0, 0))
             pygame.display.update()
             self.clock.tick(60)
         pygame.quit()
