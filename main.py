@@ -31,7 +31,8 @@ class Game:
 
         # images
         self.assets = {
-            'ground/city': load_images('ground/city', scaleFactor=3)
+            'ground/city': load_images('ground/city', scaleFactor=3),
+            'ground/city-road': load_images('ground/city-road', scaleFactor=3)
         }
 
         #tilemap
